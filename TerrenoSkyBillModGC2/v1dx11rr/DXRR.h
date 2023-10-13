@@ -11,6 +11,8 @@
 #include "ModeloRR.h"
 #include "XACT3Util.h"
 
+//hola, esto es una prueba
+
 class DXRR{	
 
 private:
