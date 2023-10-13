@@ -45,7 +45,8 @@ public:
 	BillboardRR *billboard;
 	Camara *camara;
 	ModeloRR* model;
-	
+	ModeloRR* edificio;
+
 	float izqder;
 	float arriaba;
 	float vel;
@@ -79,8 +80,7 @@ public:
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome.png");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/Cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", 0, 0);
-
-		
+		edificio = new ModeloRR(d3dDevice, d3dContext, "Assets/edificio/edificio.obj", L"Assets/edificio/edificio_1.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 
 		
 	}
@@ -278,6 +278,7 @@ public:
 		//TurnOffAlphaBlending();
 		model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
 
+		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
 		swapChain->Present( 1, 0 );
 	}
 
