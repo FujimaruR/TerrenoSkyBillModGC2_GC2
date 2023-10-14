@@ -92,7 +92,15 @@ public:
 		
 		UnloadContent();
 	}
+	//set posicion
+	void setPosX(float posX) {
+		this->posX = posX;
+	}
 
+	void setPosZ(float posZ) {
+		this->posZ = posZ;
+	}
+	//get posicion
 	float getPosX() {
 		return this->posX;
 	}
@@ -396,7 +404,7 @@ public:
 		viewMatrix *= rotationMat;
 
 		D3DXMATRIX scaleMat;
-		D3DXMatrixScaling(&scaleMat, scale,scale,scale);
+		D3DXMatrixScaling(&scaleMat, scale,scale*1.5,scale);
 
 		D3DXMATRIX worldMat = rotationMat * scaleMat * translationMat;
 		D3DXMatrixTranspose(&worldMat, &worldMat);

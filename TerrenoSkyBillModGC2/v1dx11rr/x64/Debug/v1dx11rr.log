@@ -129,26 +129,27 @@ C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathvector.i
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(518,43): warning C4838: la conversión de 'unsigned int' en 'INT' requiere una conversión de restricción
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(519,40): warning C4838: la conversión de 'unsigned int' en 'INT' requiere una conversión de restricción
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(519,51): warning C4838: la conversión de 'unsigned int' en 'INT' requiere una conversión de restricción
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(297,64): warning C4244: 'argumento': conversión de 'int' a 'FLOAT'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(297,1): warning C4305: 'argumento': truncamiento de 'double' a 'FLOAT'
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(357,1): warning C4305: '+=': truncamiento de 'double' a 'float'
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(260,1): warning C4305: '+=': truncamiento de 'double' a 'float'
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(422,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(423,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(424,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(425,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(433,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(434,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(435,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(436,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(445,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(446,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(447,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(448,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(457,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(458,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(459,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(460,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(305,64): warning C4244: 'argumento': conversión de 'int' a 'FLOAT'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(305,1): warning C4305: 'argumento': truncamiento de 'double' a 'FLOAT'
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(365,1): warning C4305: '+=': truncamiento de 'double' a 'float'
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\ModeloRR.h(407,43): warning C4244: 'argumento': conversión de 'double' a 'FLOAT'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(262,1): warning C4305: '+=': truncamiento de 'double' a 'float'
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(442,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(443,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(444,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(445,24): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(453,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(454,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(455,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(456,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(465,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(466,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(467,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(468,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(477,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(478,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(479,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\DXRR.h(480,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\TerrenoSkyBill.cpp(146,15): warning C4244: 'return': conversión de 'WPARAM' a 'int'; posible pérdida de datos
 D:\Graficas PIA\TerrenoSkyBillModGC2_GC2\TerrenoSkyBillModGC2\v1dx11rr\TerrenoSkyBill.cpp(213,30): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos

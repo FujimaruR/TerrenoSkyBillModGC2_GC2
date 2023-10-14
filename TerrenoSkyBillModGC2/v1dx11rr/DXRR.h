@@ -44,12 +44,12 @@ public:
 	SkyDome *skydome;
 	BillboardRR *billboard;
 	Camara *camara;
-	ModeloRR* model;
 	ModeloRR* edificio;
 	ModeloRR* pizza;
 	ModeloRR* pizzeria;
 	ModeloRR* repartidor;
-
+	ModeloRR* moto;
+	ModeloRR* mesa;
 	float izqder;
 	float arriaba;
 	float vel;
@@ -82,12 +82,14 @@ public:
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome.png");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
-		model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/Cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", 0, 0);
+		
 		edificio = new ModeloRR(d3dDevice, d3dContext, "Assets/edificio/edificio.obj", L"Assets/edificio/edificio_1.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 
 		pizzeria = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizzeria/Pizzeria.obj", L"Assets/Pizzeria/pizzeria.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		pizza = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizza/Pizza.obj", L"Assets/Pizza/pizza.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		repartidor = new ModeloRR(d3dDevice, d3dContext, "Assets/Repartidor/Repartidor.obj", L"Assets/Repartidor/cuerpo_del_personaje.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		moto= new ModeloRR(d3dDevice, d3dContext, "Assets/Moto/moto.obj", L"Assets/Moto/Scooter.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		mesa = new ModeloRR(d3dDevice, d3dContext, "Assets/Mesa/Mesa.obj", L"Assets/Mesa/mesa.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 	}
 
 	~DXRR()
@@ -281,12 +283,30 @@ public:
 			-11, -78, 4, 5, uv1, uv2, uv3, uv4, frameBillboard);
 
 		//TurnOffAlphaBlending();
-		model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		
+		edificio->setPosX(0.0f);
+		edificio->setPosZ(100.0f);
+		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(edificio->getPosX(), edificio->getPosZ()), camara->posCam, 10.0f, 0, 'A', 0.5);
+		
+		pizzeria->setPosX(-20.0f);
+		pizzeria->setPosZ(-80.0f);
+		pizzeria->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizzeria->getPosX(), pizzeria->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		
+		mesa->setPosX(-15.0f);
+		mesa->setPosZ(-75.0f);
+		mesa->Draw(camara->vista, camara->proyeccion, terreno->Superficie(mesa->getPosX(), mesa->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 
-		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
-		pizzeria->Draw(camara->vista, camara->proyeccion, terreno->Superficie(50, 20), camara->posCam, 10.0f, 0, 'A', 1);
-		repartidor->Draw(camara->vista, camara->proyeccion, terreno->Superficie(10, 20), camara->posCam, 10.0f, 0, 'A', 1);
-		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		repartidor->setPosX(-20.0f);
+		repartidor->setPosZ(-80.0f);
+		repartidor->Draw(camara->vista, camara->proyeccion, terreno->Superficie(repartidor->getPosX(), repartidor->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		
+		pizza->setPosX(-15.0f);
+		pizza->setPosZ(-75.0f);
+		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ())+4, camara->posCam, 10.0f, 0, 'A', 1);
+		
+		moto->setPosX(-20.0f);
+		moto->setPosZ(-50.0f);
+		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 
 		swapChain->Present( 1, 0 );
 	}
