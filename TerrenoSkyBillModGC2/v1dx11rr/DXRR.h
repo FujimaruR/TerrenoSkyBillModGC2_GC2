@@ -46,6 +46,9 @@ public:
 	Camara *camara;
 	ModeloRR* model;
 	ModeloRR* edificio;
+	ModeloRR* pizza;
+	ModeloRR* pizzeria;
+	ModeloRR* repartidor;
 
 	float izqder;
 	float arriaba;
@@ -82,7 +85,9 @@ public:
 		model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/Cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", 0, 0);
 		edificio = new ModeloRR(d3dDevice, d3dContext, "Assets/edificio/edificio.obj", L"Assets/edificio/edificio_1.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 
-		
+		pizzeria = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizzeria/Pizzeria.obj", L"Assets/Pizzeria/pizzeria.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		pizza = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizza/Pizza.obj", L"Assets/Pizza/pizza.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		repartidor = new ModeloRR(d3dDevice, d3dContext, "Assets/Repartidor/Repartidor.obj", L"Assets/Repartidor/cuerpo_del_personaje.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 	}
 
 	~DXRR()
@@ -279,6 +284,10 @@ public:
 		model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
 
 		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		pizzeria->Draw(camara->vista, camara->proyeccion, terreno->Superficie(50, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		repartidor->Draw(camara->vista, camara->proyeccion, terreno->Superficie(10, 20), camara->posCam, 10.0f, 0, 'A', 1);
+		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(0, 20), camara->posCam, 10.0f, 0, 'A', 1);
+
 		swapChain->Present( 1, 0 );
 	}
 
