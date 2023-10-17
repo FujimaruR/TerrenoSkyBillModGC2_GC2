@@ -49,12 +49,18 @@ public:
 	SkyDome *skydome;
 	BillboardRR *billboard;
 	Camara *camara;
+
+	//modelos xd
 	ModeloRR* edificio;
 	ModeloRR* pizza;
 	ModeloRR* pizzeria;
 	ModeloRR* repartidor;
 	ModeloRR* moto;
 	ModeloRR* mesa;
+	ModeloRR* casa1;
+	ModeloRR* casa2;
+	ModeloRR* casa3;
+
 	float izqder;
 	float arriaba;
 	float vel;
@@ -96,7 +102,9 @@ public:
 		repartidor = new ModeloRR(d3dDevice, d3dContext, "Assets/Repartidor/Repartidor.obj", L"Assets/Repartidor/cuerpo_del_personaje.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		moto= new ModeloRR(d3dDevice, d3dContext, "Assets/Moto/moto.obj", L"Assets/Moto/Scooter.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		mesa = new ModeloRR(d3dDevice, d3dContext, "Assets/Mesa/Mesa.obj", L"Assets/Mesa/mesa.jpg", L"Assets/noSpecMap.jpg", 0, 0);
-
+		casa1 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa1/casa1.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		casa2 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa2/casa2.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		casa3 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa3/casa3.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 
 		diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloDiaUIAlpha.png");
 		tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/TardeUIAlpha.png");
@@ -295,7 +303,7 @@ public:
 
 		//TurnOffAlphaBlending();
 		
-		edificio->setPosX(0.0f);
+		edificio->setPosX(5.0f);
 		edificio->setPosZ(100.0f);
 		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(edificio->getPosX(), edificio->getPosZ()), camara->posCam, 10.0f, 0, 'A', 0.5);
 		
@@ -318,6 +326,30 @@ public:
 		moto->setPosX(-20.0f);
 		moto->setPosZ(-50.0f);
 		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		
+		casa1->setPosX(10.0f);
+		casa1->setPosZ(-80.0f);
+		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		
+		casa1->setPosX(10.0f);
+		casa1->setPosZ(30.0f);
+		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		//xd
+		casa1->setPosX(-80.0f);
+		casa1->setPosZ(80.0f);
+		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 180 * (XM_PI / 180), 'Y', 1);
+
+		casa2->setPosX(50.0f);
+		casa2->setPosZ(30.0f);
+		casa2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa2->getPosX(), casa2->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+
+		casa3->setPosX(50.0f);
+		casa3->setPosZ(-40.0f);
+		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 270 * (XM_PI / 180), 'Y', 1);
+
+		casa3->setPosX(-30.0f);
+		casa3->setPosZ(100.0f);
+		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 180*(XM_PI/180), 'Y', 1);
 
 		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {
 			diaUI->Draw(0.8, 0.8);
