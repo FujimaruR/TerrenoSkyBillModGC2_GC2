@@ -35,6 +35,10 @@ private:
 
 	ID3D11ShaderResourceView* textura;
 	ID3D11SamplerState* texSampler;
+	ID3D11ShaderResourceView* texturaNoche;
+	ID3D11ShaderResourceView* texturaTarde;
+	ID3D11Buffer* blendFactorCB;
+	D3DXVECTOR3 blendFactor;
 
 	ID3D11Buffer* matrixBufferCB;
 	MatrixType* matrices;
@@ -46,9 +50,19 @@ private:
 	ID3D11Device** d3dDevice;
 	ID3D11DeviceContext** d3dContext;
 
+	bool condicion = false;
+	int ticks = 0;
+	int seg = 0;
+	int bandera = 0;
+	int bandera2 = 0;
+
 public:
+	int getSkydomeStatus() {
+		return bandera2;
+	}
+
 	SkyDome(int slices, int stacks, float radio, ID3D11Device** d3dDevice,
-		ID3D11DeviceContext** d3dContext, WCHAR* diffuseTex)
+		ID3D11DeviceContext** d3dContext, WCHAR* diffuseTex, WCHAR* diffuseTexTarde, WCHAR* diffuseTexNoche)
 	{
 		this->slices = slices;
 		this->stacks = stacks;
@@ -57,7 +71,8 @@ public:
 		vertices = NULL;
 		this->d3dDevice = d3dDevice;
 		this->d3dContext = d3dContext;
-		LoadContent(diffuseTex);
+		LoadContent(diffuseTex, diffuseTexTarde, diffuseTexNoche);
+		blendFactor = D3DXVECTOR3(1.0, 0.0, 0.0);
 	}
 
 	~SkyDome()
@@ -91,7 +106,7 @@ public:
 		return true;
 	}
 
-	bool LoadContent(WCHAR* diffuseTex)
+	bool LoadContent(WCHAR* diffuseTex, WCHAR* diffuseTexTarde, WCHAR* diffuseTexNoche)
 	{
 		HRESULT d3dResult;
 
@@ -204,6 +219,19 @@ public:
 			return false;
 		}
 
+		d3dResult = D3DX11CreateShaderResourceViewFromFile((*d3dDevice), diffuseTexTarde, 0, 0, &texturaTarde, 0);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+		d3dResult = D3DX11CreateShaderResourceViewFromFile((*d3dDevice), diffuseTexNoche, 0, 0, &texturaNoche, 0);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
 		D3D11_SAMPLER_DESC colorMapDesc;
 		ZeroMemory(&colorMapDesc, sizeof(colorMapDesc));
 		colorMapDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -236,6 +264,14 @@ public:
 		}
 		matrices = new MatrixType;
 
+		constDesc.ByteWidth = sizeof(D3DXVECTOR4);
+		d3dResult = (*d3dDevice)->CreateBuffer(&constDesc, 0, &blendFactorCB);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -258,6 +294,13 @@ public:
 		if (matrixBufferCB)
 			matrixBufferCB->Release();
 
+		if (texturaTarde)
+			texturaTarde->Release();
+		if (texturaNoche)
+			texturaNoche->Release();
+		if (blendFactorCB)
+			blendFactorCB->Release();
+
 		texSampler = 0;
 		textura = 0;
 		solidColorVS = 0;
@@ -266,6 +309,10 @@ public:
 		vertexBuffer = 0;
 		indexBuffer = 0;
 		matrixBufferCB = 0;
+
+		texturaTarde = 0;
+		texturaNoche = 0;
+		blendFactorCB = 0;
 
 		return true;
 	}
@@ -292,6 +339,8 @@ public:
 		(*d3dContext)->VSSetShader(solidColorVS, 0, 0);
 		(*d3dContext)->PSSetShader(solidColorPS, 0, 0);
 		(*d3dContext)->PSSetShaderResources(0, 1, &textura);
+		(*d3dContext)->PSSetShaderResources(1, 1, &texturaTarde);
+		(*d3dContext)->PSSetShaderResources(2, 1, &texturaNoche);
 		(*d3dContext)->PSSetSamplers(0, 1, &texSampler);
 
 		D3DXMATRIX worldMat;
@@ -301,6 +350,9 @@ public:
 
 		(*d3dContext)->UpdateSubresource(matrixBufferCB, 0, 0, matrices, sizeof(MatrixType), 0);
 		(*d3dContext)->VSSetConstantBuffers(0, 1, &matrixBufferCB);
+
+		(*d3dContext)->UpdateSubresource(blendFactorCB, 0, 0, &blendFactor, sizeof(D3DXVECTOR4), 0);
+		(*d3dContext)->PSSetConstantBuffers(0, 1, &blendFactorCB);
 
 		(*d3dContext)->DrawIndexed(cantIndex, 0, 0);
 	}

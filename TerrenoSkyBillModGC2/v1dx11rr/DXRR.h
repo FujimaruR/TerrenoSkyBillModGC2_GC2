@@ -10,6 +10,7 @@
 #include "Billboard.h"
 #include "ModeloRR.h"
 #include "XACT3Util.h"
+#include "GUI.h"
 
 //hola, esto es una prueba
 
@@ -40,6 +41,10 @@ public:
 
 	int frameBillboard;
 
+	GUI* diaUI;
+	GUI* tardeUI;
+	GUI* nocheUI;
+
 	TerrenoRR *terreno;
 	SkyDome *skydome;
 	BillboardRR *billboard;
@@ -61,6 +66,7 @@ public:
 
 	XACTINDEX cueIndex;
 	CXACT3Util m_XACT3;
+	D3DXVECTOR3 posCam;
 	
     DXRR(HWND hWnd, int Ancho, int Alto)
 	{
@@ -80,7 +86,7 @@ public:
 		billCargaFuego();
 		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
-		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome.png");
+		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Sky/sky_2.jpg", L"Sky/skydome_Tarde.jpg", L"Sky/SkyNoche.png");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		
 		edificio = new ModeloRR(d3dDevice, d3dContext, "Assets/edificio/edificio.obj", L"Assets/edificio/edificio_1.jpg", L"Assets/noSpecMap.jpg", 0, 0);
@@ -90,6 +96,11 @@ public:
 		repartidor = new ModeloRR(d3dDevice, d3dContext, "Assets/Repartidor/Repartidor.obj", L"Assets/Repartidor/cuerpo_del_personaje.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		moto= new ModeloRR(d3dDevice, d3dContext, "Assets/Moto/moto.obj", L"Assets/Moto/Scooter.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		mesa = new ModeloRR(d3dDevice, d3dContext, "Assets/Mesa/Mesa.obj", L"Assets/Mesa/mesa.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+
+
+		diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloDiaUIAlpha.png");
+		tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/TardeUIAlpha.png");
+		nocheUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloNocheUIAlpha.png");
 	}
 
 	~DXRR()
@@ -308,6 +319,16 @@ public:
 		moto->setPosZ(-50.0f);
 		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 
+		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {
+			diaUI->Draw(0.8, 0.8);
+		}
+		else  if (skydome->getSkydomeStatus() == 1) {
+			tardeUI->Draw(0.8, 0.8);
+		}
+		else if (skydome->getSkydomeStatus() == 2) {
+			nocheUI->Draw(0.8, 0.8);
+		}
+		
 		swapChain->Present( 1, 0 );
 	}
 

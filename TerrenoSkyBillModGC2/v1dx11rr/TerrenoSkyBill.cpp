@@ -6,7 +6,7 @@
 
 #include <dinput.h>
 #include <xinput.h>
-
+#include <string>
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")
 #pragma comment (lib, "d3dx10.lib")
@@ -191,6 +191,18 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
             if (keyboardData[DIK_B] & 0x80) {
                 dxrr->breakpoint = true;
+            }
+
+            if (keyboardData[DIK_P]) {
+
+                wstring info = L"X: ";
+                info.append(to_wstring(dxrr->posCam.x));
+                info.append(L" Y: ");
+                info.append(to_wstring(dxrr->posCam.y));
+                info.append(L" Z: ");
+                info.append(to_wstring(dxrr->posCam.z));
+                MessageBox(hWnd, info.c_str(), L"INFO", MB_OK);
+                return 0;
             }
 
             if (keyboardData[DIK_ESCAPE] & 0x80) {
