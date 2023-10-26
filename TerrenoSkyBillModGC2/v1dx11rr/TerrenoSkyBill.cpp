@@ -176,34 +176,38 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             dxrr->izqder = 0;
             dxrr->arriaba = 0;
             dxrr->vel = 0;
-
+            dxrr->velIzqDer = 0;
             char keyboardData[256];
             m_pKeyboardDevice->GetDeviceState(sizeof(keyboardData), (void*)&keyboardData);
-
+            
             if (keyboardData[DIK_S] & 0x80) {
                 dxrr->vel = -5.f;
             }
-
-
             if (keyboardData[DIK_W] & 0x80) {
                 dxrr->vel = 5.f;
+            }
+            if(keyboardData[DIK_A] & 0x80) {
+                dxrr->velIzqDer = 5.f;
+            }
+            if (keyboardData[DIK_D] & 0x80) {
+                dxrr->velIzqDer = -5.f;
             }
 
             if (keyboardData[DIK_B] & 0x80) {
                 dxrr->breakpoint = true;
             }
 
-            if (keyboardData[DIK_P]) {
+            //if (keyboardData[DIK_P]) {
 
-                wstring info = L"X: ";
-                info.append(to_wstring(dxrr->posCam.x));
-                info.append(L" Y: ");
-                info.append(to_wstring(dxrr->posCam.y));
-                info.append(L" Z: ");
-                info.append(to_wstring(dxrr->posCam.z));
-                MessageBox(hWnd, info.c_str(), L"INFO", MB_OK);
-                return 0;
-            }
+            //    wstring info = L"X: ";
+            //    info.append(to_wstring(dxrr->posCam.x));
+            //    info.append(L" Y: ");
+            //    info.append(to_wstring(dxrr->posCam.y));
+            //    info.append(L" Z: ");
+            //    info.append(to_wstring(dxrr->posCam.z));
+            //    MessageBox(hWnd, info.c_str(), L"INFO", MB_OK);
+            //    return 0;
+            //}
 
             if (keyboardData[DIK_ESCAPE] & 0x80) {
                 KillTimer(hWnd, 100);

@@ -64,6 +64,10 @@ public:
 	float izqder;
 	float arriaba;
 	float vel;
+
+	float velIzqDer;//xd
+	float rotCam;//xd
+
 	bool breakpoint;
 	vector2 uv1[32];
 	vector2 uv2[32];
@@ -109,6 +113,9 @@ public:
 		diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloDiaUIAlpha.png");
 		tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/TardeUIAlpha.png");
 		nocheUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloNocheUIAlpha.png");
+		
+		velIzqDer = 0;//xd
+		rotCam = 0;//xd
 	}
 
 	~DXRR()
@@ -275,6 +282,7 @@ public:
 	
 	void Render(void)
 	{
+		rotCam += izqder;//xd
 		float sphere[3] = { 0,0,0 };
 		float prevPos[3] = { camara->posCam.x, camara->posCam.z, camara->posCam.z };
 		static float angle = 0.0f;
@@ -288,7 +296,7 @@ public:
 		d3dContext->ClearRenderTargetView( backBufferTarget, clearColor );
 		d3dContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
 		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 5 ;
-		camara->UpdateCam(vel, arriaba, izqder);
+		camara->UpdateCam(vel,velIzqDer, arriaba, izqder);
 		skydome->Update(camara->vista, camara->proyeccion);
 
 		float camPosXZ[2] = { camara->posCam.x, camara->posCam.z };
@@ -323,9 +331,9 @@ public:
 		pizza->setPosZ(-75.0f);
 		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ())+4, camara->posCam, 10.0f, 0, 'A', 1);
 		
-		moto->setPosX(-20.0f);
-		moto->setPosZ(-50.0f);
-		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
+		moto->setPosX(camara->posCam.x);
+		moto->setPosZ(camara->posCam.z);
+		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f,  rotCam, 'Y', 1);
 		
 		casa1->setPosX(10.0f);
 		casa1->setPosZ(-80.0f);
