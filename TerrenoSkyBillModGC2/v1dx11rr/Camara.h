@@ -11,6 +11,8 @@
 class Camara{
 public:
 	D3DXVECTOR3 posCam;
+	D3DXVECTOR3 posCamPast;//xd colision
+
 	D3DXVECTOR3 hdveo;
 	D3DXVECTOR3 hdvoy;
 	D3DXVECTOR3 refUp;
@@ -51,6 +53,9 @@ public:
 
 	D3DXMATRIX UpdateCam(float vel,float velIzqDer, float arriaba, float izqder)
 	{
+		//xd colision- guardar posicion actual de la camara
+		posCamPast = posCam;
+
 		D3DXVECTOR4 tempo;
 		D3DXQUATERNION quatern; //quaternion temporal para la camara
 		D3DXMATRIX giraUp, giraRight; //matrices temporales para los giros
@@ -94,6 +99,11 @@ public:
 	}
 	~Camara()
 	{
+	}
+	//xd colision
+	float* GetPoint() {
+		float* point = new float[2]{ posCam.x, posCam.z};
+		return point;
 	}
 };
 #endif

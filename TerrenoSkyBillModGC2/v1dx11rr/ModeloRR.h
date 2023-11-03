@@ -109,6 +109,12 @@ public:
 		return this->posZ;
 	}
 
+	//xd colision
+	float* GetSphere(float radio) {
+		float* sphere = new float[3]{ posX, posZ, radio };
+		return sphere;
+	}
+
 	bool CompileD3DShader(WCHAR* filePath, char* entry, char* shaderModel, ID3DBlob** buffer)
 	{
 		//forma de compilar el shader

@@ -48,6 +48,13 @@ public:
 	TerrenoRR *terreno;
 	SkyDome *skydome;
 	BillboardRR *billboard;
+	BillboardRR* chica;//xd billboard
+	BillboardRR* chico;
+
+	BillboardRR* arbol1;
+	BillboardRR* arbol2;
+	BillboardRR* arbol3;
+
 	Camara *camara;
 
 	//modelos xd
@@ -116,6 +123,13 @@ public:
 		
 		velIzqDer = 0;//xd
 		rotCam = 0;//xd
+
+		chica = new BillboardRR(L"Assets/Billboards/nina.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);//xd
+		chico = new BillboardRR(L"Assets/Billboards/pocoyo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+
+		arbol1 = new BillboardRR(L"Assets/Billboards/arbol1.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+		arbol2 = new BillboardRR(L"Assets/Billboards/arbol2.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+		arbol3 = new BillboardRR(L"Assets/Billboards/cerezo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
 	}
 
 	~DXRR()
@@ -253,6 +267,18 @@ public:
 
 		d3dContext->OMSetRenderTargets(1, &backBufferTarget, depthStencilView);
 
+		//Audio xd
+		bool res = m_XACT3.Initialize();
+		if (!res)return res;
+
+		res = m_XACT3.LoadWaveBank(L"Assets\\Audio\\WaveBank.xwb");
+		if (!res) return res;
+		res = m_XACT3.LoadSoundBank(L"Assets\\Audio\\Sound Bank.xsb");
+		if (!res) return res;
+
+		cueIndex = m_XACT3.m_pSoundBank->GetCueIndex("fondoJuego");
+		m_XACT3.m_pSoundBank->Play(cueIndex, 0, 0, 0);
+
 		return true;			
 		
 	}
@@ -289,14 +315,14 @@ public:
 		angle += 0.005;
 		if (angle >= 360) angle = 0.0f;
 		bool collide = false;
-		if( d3dContext == 0 )
+		if (d3dContext == 0)
 			return;
 
 		float clearColor[4] = { 0, 0, 0, 1.0f };
-		d3dContext->ClearRenderTargetView( backBufferTarget, clearColor );
-		d3dContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 5 ;
-		camara->UpdateCam(vel,velIzqDer, arriaba, izqder);
+		d3dContext->ClearRenderTargetView(backBufferTarget, clearColor);
+		d3dContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 5;
+
 		skydome->Update(camara->vista, camara->proyeccion);
 
 		float camPosXZ[2] = { camara->posCam.x, camara->posCam.z };
@@ -306,11 +332,62 @@ public:
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
 		//TurnOnAlphaBlending();
-		billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
-			-11, -78, 4, 5, uv1, uv2, uv3, uv4, frameBillboard);
+		//BILLBOARD
+
+		//billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
+		//	-11, -78, 4, 5, true, uv1, uv2, uv3, uv4, frameBillboard);//animado
+
+		chica->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			0, 80, terreno->Superficie(0, 80), 3, false);
+
+		chico->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, 40, terreno->Superficie(40, 40), 3, false);
+		//frente al edificio
+		arbol2->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			10, 30, terreno->Superficie(10, 30), 10, false);
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-50, 30, terreno->Superficie(0, 30), 10, false);
+		arbol2->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-95, 70, terreno->Superficie(-40, 10), 10, false);
+
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			10, -80, terreno->Superficie(-5, -50),10, false);
+		arbol2->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			15, -70, terreno->Superficie(40, 100), 10, false);
+
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			10, -80, terreno->Superficie(-5, -50), 10, false);
+		arbol2->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			15, -70, terreno->Superficie(40, 100), 10, false);
+
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, 80, terreno->Superficie(50, 80), 10, false);
+
+		arbol2->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-50, 80, terreno->Superficie(-50, 80), 10, false);
+
+		//arboles sustitutos
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, -60, terreno->Superficie(40, -60), 10, false);
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, -40, terreno->Superficie(40, -40), 10, false);
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, -20, terreno->Superficie(40, -20), 10, false);
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			40, 0, terreno->Superficie(40, 0), 10, false);
+
+		//lado del lago
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-120, -60, terreno->Superficie(40, -60), 10, false);
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-120, 0, terreno->Superficie(40, 0), 10, false);
+
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-40, -80, terreno->Superficie(40, 0), 10, false);
 
 		//TurnOffAlphaBlending();
 		
+		//MODELOS
 		edificio->setPosX(5.0f);
 		edificio->setPosZ(100.0f);
 		edificio->Draw(camara->vista, camara->proyeccion, terreno->Superficie(edificio->getPosX(), edificio->getPosZ()), camara->posCam, 10.0f, 0, 'A', 0.5);
@@ -335,14 +412,6 @@ public:
 		moto->setPosZ(camara->posCam.z);
 		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f,  rotCam, 'Y', 1);
 		
-		casa1->setPosX(10.0f);
-		casa1->setPosZ(-80.0f);
-		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
-		
-		casa1->setPosX(10.0f);
-		casa1->setPosZ(30.0f);
-		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
-		//xd
 		casa1->setPosX(-80.0f);
 		casa1->setPosZ(80.0f);
 		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 180 * (XM_PI / 180), 'Y', 1);
@@ -351,13 +420,22 @@ public:
 		casa2->setPosZ(30.0f);
 		casa2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa2->getPosX(), casa2->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 
-		casa3->setPosX(50.0f);
-		casa3->setPosZ(-40.0f);
-		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 270 * (XM_PI / 180), 'Y', 1);
-
 		casa3->setPosX(-30.0f);
 		casa3->setPosZ(100.0f);
 		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 180*(XM_PI/180), 'Y', 1);
+		
+		//xd COLISION
+		if (!isPointInsideSphere(camara->GetPoint(), casa1->GetSphere(10))&& 
+			!isPointInsideSphere(camara->GetPoint(), mesa->GetSphere(3)) &&
+			!isPointInsideSphere(camara->GetPoint(), casa2->GetSphere(13))&&
+			!isPointInsideSphere(camara->GetPoint(), casa3->GetSphere(13))&&
+			!isPointInsideSphere(camara->GetPoint(), edificio->GetSphere(15))){
+
+			camara->UpdateCam(vel, velIzqDer, arriaba, izqder);
+		}
+		else {
+				camara->posCam = camara->posCamPast;
+		}
 
 		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {
 			diaUI->Draw(0.8, 0.8);
