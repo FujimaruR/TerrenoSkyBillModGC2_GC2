@@ -90,7 +90,7 @@ public:
 		//ajustamos la matriz de vista con lo obtenido
 
 		posCam += refFront * vel / 10.0;
-		posCam += refRight * velIzqDer / 10.0;
+		posCam += refRight * velIzqDer / 10.0;//con esto hacemos el movimiento a izquierda o derecha
 		hdveo = posCam + refFront;
 
 		D3DXMatrixLookAtLH(&vista, &posCam, &hdveo, &refUp);

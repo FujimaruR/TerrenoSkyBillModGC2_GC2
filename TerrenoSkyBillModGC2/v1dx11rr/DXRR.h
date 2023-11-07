@@ -332,11 +332,13 @@ public:
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
 		//TurnOnAlphaBlending();
+		
 		//BILLBOARD
-
+		//animado
 		//billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
-		//	-11, -78, 4, 5, true, uv1, uv2, uv3, uv4, frameBillboard);//animado
+		//	-11, -78, 4, 5, true, uv1, uv2, uv3, uv4, frameBillboard);
 
+		//sin animar
 		chica->Draw(camara->vista, camara->proyeccion, camara->posCam,
 			0, 80, terreno->Superficie(0, 80), 3, false);
 
@@ -408,10 +410,15 @@ public:
 		pizza->setPosZ(-75.0f);
 		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ())+4, camara->posCam, 10.0f, 0, 'A', 1);
 		
+		//Camara en el modelo 
+		//le pasamos la posicion de la camara en x y z
 		moto->setPosX(camara->posCam.x);
 		moto->setPosZ(camara->posCam.z);
 		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f,  rotCam, 'Y', 1);
-		
+		// rotCam almacena el valor de rotacion de la camara, para que el modelo rote junto con el movimiento de la camara
+		// la letra "Y" representa la rotacion en Y, si pones cualquier otra letra no hara nada, tiene que ser X, Y o Z para que haga algo
+
+
 		casa1->setPosX(-80.0f);
 		casa1->setPosZ(80.0f);
 		casa1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa1->getPosX(), casa1->getPosZ()), camara->posCam, 10.0f, 180 * (XM_PI / 180), 'Y', 1);
@@ -431,10 +438,10 @@ public:
 			!isPointInsideSphere(camara->GetPoint(), casa3->GetSphere(13))&&
 			!isPointInsideSphere(camara->GetPoint(), edificio->GetSphere(15))){
 
-			camara->UpdateCam(vel, velIzqDer, arriaba, izqder);
+			camara->UpdateCam(vel, velIzqDer, arriaba, izqder);//no se encuentra dentro de la esfera, entonces actualiza la posicion de la camara
 		}
 		else {
-				camara->posCam = camara->posCamPast;
+				camara->posCam = camara->posCamPast;//sino establece la camara en su posicion anterior para que no pase el limite de la esfera
 		}
 
 		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {
@@ -454,9 +461,9 @@ public:
 		bool collition = false;
 
 		float distance = sqrt((point[0] - sphere[0]) * (point[0] - sphere[0]) +
-			(point[1] - sphere[1]) * (point[1] - sphere[1]));
+			(point[1] - sphere[1]) * (point[1] - sphere[1]));// se calcula la distancia entre la camara y la esfera(distancia entre dos puntos)
 
-		if (distance < sphere[2])
+		if (distance < sphere[2])//si la distancia es menor al radio de la esfera entonces esta colisionando
 			collition = true;
 		return collition;
 	}
