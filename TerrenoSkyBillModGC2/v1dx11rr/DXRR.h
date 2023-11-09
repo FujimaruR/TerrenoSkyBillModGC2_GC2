@@ -10,7 +10,9 @@
 #include "Billboard.h"
 #include "ModeloRR.h"
 #include "XACT3Util.h"
+
 #include "GUI.h"
+#include "Text.h"
 
 //hola, esto es una prueba
 
@@ -40,6 +42,20 @@ public:
 	ID3D11BlendState *alphaBlendState, *commonBlendState;
 
 	int frameBillboard;
+
+//INTERFAZ UI
+	//reputacion
+		GUI* alta;
+		GUI* media;
+		GUI* baja;
+	//inputs
+		GUI* teclas;
+		GUI* pedidos;
+	//inventario
+		GUI* vacio;
+		GUI* pep;
+		GUI* haw;
+		GUI* amb;
 
 	GUI* diaUI;
 	GUI* tardeUI;
@@ -85,6 +101,17 @@ public:
 	CXACT3Util m_XACT3;
 	D3DXVECTOR3 posCam;
 	
+	//jugabilidad 
+	bool inventario;
+
+	bool peperoni;
+	bool hawaiana;
+	bool ambos;
+
+	bool pedidosQ;
+
+	float tiempo;
+	Text* texto;
     DXRR(HWND hWnd, int Ancho, int Alto)
 	{
 		breakpoint = false;
@@ -116,20 +143,43 @@ public:
 		casa1 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa1/casa1.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		casa2 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa2/casa2.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		casa3 = new ModeloRR(d3dDevice, d3dContext, "Assets/casa3/casa3.obj", L"Assets/casa1/houses.jpg", L"Assets/noSpecMap.jpg", 0, 0);
-
-		diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloDiaUIAlpha.png");
-		tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/TardeUIAlpha.png");
-		nocheUI = new GUI(d3dDevice, d3dContext, 0.4, 0.2, L"Assets/UI/CicloNocheUIAlpha.png");
+		
+		//INTERFAZ
+			vacio= new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/vacio.png");
+			pep = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/peperoni.png");
+		//reputacion
+			alta= new GUI(d3dDevice, d3dContext, 0.3, 0.5, L"Assets/UI/reputacion/alta.png");
+			media = new GUI(d3dDevice, d3dContext, 0.3, 0.5, L"Assets/UI/reputacion/media.png");
+			baja = new GUI(d3dDevice, d3dContext, 0.3, 0.5, L"Assets/UI/reputacion/baja.png");
+		//input
+			teclas= new GUI(d3dDevice, d3dContext, 0.8, 0.3, L"Assets/UI/teclas/teclas.png");
+			pedidos = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/teclas/pedidosxd.png");
+		
+		//ciclo dia noche
+			diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/diaxd.png");
+			tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/tardexd.png");
+			nocheUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/nochexd.png");
 		
 		velIzqDer = 0;//xd
 		rotCam = 0;//xd
+		
+		//BILLBOARD
+			chica = new BillboardRR(L"Assets/Billboards/nina.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);//xd
+			chico = new BillboardRR(L"Assets/Billboards/pocoyo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
 
-		chica = new BillboardRR(L"Assets/Billboards/nina.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);//xd
-		chico = new BillboardRR(L"Assets/Billboards/pocoyo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+			arbol1 = new BillboardRR(L"Assets/Billboards/arbol1.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+			arbol2 = new BillboardRR(L"Assets/Billboards/arbol2.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+			arbol3 = new BillboardRR(L"Assets/Billboards/cerezo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
 
-		arbol1 = new BillboardRR(L"Assets/Billboards/arbol1.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
-		arbol2 = new BillboardRR(L"Assets/Billboards/arbol2.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
-		arbol3 = new BillboardRR(L"Assets/Billboards/cerezo.png", L"Assets/Billboards/nNormal.png", d3dDevice, d3dContext, 5);
+		inventario = false;
+		pedidosQ = false;
+
+		peperoni = false;
+		hawaiana = false;
+		ambos = false;
+
+		tiempo = 60;
+		texto = new Text(d3dDevice, d3dContext, 3.6, 1.2, L"Assets/UI/fuente/font.png", XMFLOAT4(0.0f, 1.0f, 1.0f, 0.0f));
 	}
 
 	~DXRR()
@@ -406,10 +456,12 @@ public:
 		repartidor->setPosZ(-80.0f);
 		repartidor->Draw(camara->vista, camara->proyeccion, terreno->Superficie(repartidor->getPosX(), repartidor->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 		
-		pizza->setPosX(-15.0f);
-		pizza->setPosZ(-75.0f);
-		pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ())+4, camara->posCam, 10.0f, 0, 'A', 1);
-		
+		if (peperoni == false) {
+			pizza->setPosX(-15.0f);
+			pizza->setPosZ(-75.0f);
+			pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ()) + 4, camara->posCam, 10.0f, 0, 'A', 1);
+
+		}
 		//Camara en el modelo 
 		//le pasamos la posicion de la camara en x y z
 		moto->setPosX(camara->posCam.x);
@@ -417,7 +469,6 @@ public:
 		moto->Draw(camara->vista, camara->proyeccion, terreno->Superficie(moto->getPosX(), moto->getPosZ()), camara->posCam, 10.0f,  rotCam, 'Y', 1);
 		// rotCam almacena el valor de rotacion de la camara, para que el modelo rote junto con el movimiento de la camara
 		// la letra "Y" representa la rotacion en Y, si pones cualquier otra letra no hara nada, tiene que ser X, Y o Z para que haga algo
-
 
 		casa1->setPosX(-80.0f);
 		casa1->setPosZ(80.0f);
@@ -431,7 +482,44 @@ public:
 		casa3->setPosZ(100.0f);
 		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 180*(XM_PI/180), 'Y', 1);
 		
-		//xd COLISION
+		//INTERFAZ
+		//reputacion
+		if (tiempo > 45) {
+			alta->Draw(-0.7f, 0.8f);
+		}
+		else if (tiempo > 25) {
+			media->Draw(-0.7f, 0.8f);
+		}
+		else if (tiempo < 25) {
+			baja->Draw(-0.7f, 0.8f);
+		}
+			
+		
+
+		teclas->Draw(0.8f, 0.2f);
+
+		if (inventario == true) {
+			if(peperoni)
+				pep->Draw(0.0f, -0.8f);
+			else
+				vacio->Draw(0.0f, -0.8f);
+
+		}
+		if (pedidosQ == true) {
+			pedidos->Draw(0.0f, 0.0f);
+		}
+
+		//TEXTO
+		tiempo -= 0.01;
+		TurnOnAlphaBlending();
+			//texto->DrawText(0.5f, 0.7f, "Tiempo: " + texto->Time(tiempo), 0.015);
+			texto->DrawText(0.8f, 0.68f, texto->Time(tiempo), 0.015);
+			if (tiempo < 60 && tiempo>55) {
+				texto->DrawText(-0.5f, 0.0f, "Completa los pedidos pendientes...", 0.015);
+			}
+		TurnOffAlphaBlending();
+
+		//COLISION
 		if (!isPointInsideSphere(camara->GetPoint(), casa1->GetSphere(10))&& 
 			!isPointInsideSphere(camara->GetPoint(), mesa->GetSphere(3)) &&
 			!isPointInsideSphere(camara->GetPoint(), casa2->GetSphere(13))&&
@@ -441,7 +529,11 @@ public:
 			camara->UpdateCam(vel, velIzqDer, arriaba, izqder);//no se encuentra dentro de la esfera, entonces actualiza la posicion de la camara
 		}
 		else {
-				camara->posCam = camara->posCamPast;//sino establece la camara en su posicion anterior para que no pase el limite de la esfera
+			camara->posCam = camara->posCamPast;//sino establece la camara en su posicion anterior para que no pase el limite de la esfera
+		}
+		if (!isPointInsideSphere(camara->GetPoint(), pizza->GetSphere(3))) {}
+		else {
+			peperoni = true;
 		}
 
 		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {

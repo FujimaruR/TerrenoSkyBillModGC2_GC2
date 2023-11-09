@@ -192,7 +192,13 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             if (keyboardData[DIK_D] & 0x80) {
                 dxrr->velIzqDer = -5.f;
             }
-
+            //jugabilidad
+            if (keyboardData[DIK_I] & 0x80) {
+                dxrr->inventario = !dxrr->inventario;
+            }
+            if (keyboardData[DIK_Q] & 0x80) {
+                dxrr->pedidosQ = !dxrr->pedidosQ;
+            }
             if (keyboardData[DIK_B] & 0x80) {
                 dxrr->breakpoint = true;
             }

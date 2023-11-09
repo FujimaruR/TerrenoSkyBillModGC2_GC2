@@ -157,6 +157,7 @@
     <ClCompile Include="XACT3Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\TerrenoSkyBillModGC2 - copia\v1dx11rr\GUI.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Camara.h" />
     <ClInclude Include="DXRR.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ModeloRR.h" />
     <ClInclude Include="SkyDome.h" />
     <ClInclude Include="TerrenoRR.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="XACT3Util.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,8 +176,10 @@
     <Text Include="SkyDome.fx" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\..\..\..\TerrenoSkyBillModGC2 - copia\v1dx11rr\GUI.fx" />
     <FxCompile Include="Billboard.hlsl" />
     <FxCompile Include="Modelo.fx" />
+    <FxCompile Include="Text.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
