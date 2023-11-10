@@ -51,11 +51,19 @@ public:
 	//inputs
 		GUI* teclas;
 		GUI* pedidos;
+		GUI* hawE;
+		GUI* pepE;
 	//inventario
 		GUI* vacio;
 		GUI* pep;
 		GUI* haw;
 		GUI* amb;
+	//Final
+		GUI* ganar;
+		GUI* perder;
+		GUI* malReputacion;
+		GUI* malTiempo;
+
 
 	GUI* diaUI;
 	GUI* tardeUI;
@@ -75,7 +83,8 @@ public:
 
 	//modelos xd
 	ModeloRR* edificio;
-	ModeloRR* pizza;
+	ModeloRR* pizza;//pep
+	ModeloRR* pizza2;//haw
 	ModeloRR* pizzeria;
 	ModeloRR* repartidor;
 	ModeloRR* moto;
@@ -111,6 +120,21 @@ public:
 	bool pedidosQ;
 
 	float tiempo;
+	float reputacion;
+
+	bool clientePep;
+	bool clienteHaw;
+
+	bool pedido1;
+	bool pedido2;
+
+	int seleccion;
+
+	int pedidosCumplidos;
+
+	bool Win;//senial de que ganaste el juego, servira para quitar la UI
+	bool Lose;
+
 	Text* texto;
     DXRR(HWND hWnd, int Ancho, int Alto)
 	{
@@ -137,6 +161,8 @@ public:
 
 		pizzeria = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizzeria/Pizzeria.obj", L"Assets/Pizzeria/pizzeria.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		pizza = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizza/Pizza.obj", L"Assets/Pizza/pizza.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+		pizza2 = new ModeloRR(d3dDevice, d3dContext, "Assets/Pizza2/Pizza.obj", L"Assets/Pizza2/pizza.jpg", L"Assets/noSpecMap.jpg", 0, 0);
+
 		repartidor = new ModeloRR(d3dDevice, d3dContext, "Assets/Repartidor/Repartidor.obj", L"Assets/Repartidor/cuerpo_del_personaje.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		moto= new ModeloRR(d3dDevice, d3dContext, "Assets/Moto/moto.obj", L"Assets/Moto/Scooter.jpg", L"Assets/noSpecMap.jpg", 0, 0);
 		mesa = new ModeloRR(d3dDevice, d3dContext, "Assets/Mesa/Mesa.obj", L"Assets/Mesa/mesa.jpg", L"Assets/noSpecMap.jpg", 0, 0);
@@ -147,6 +173,8 @@ public:
 		//INTERFAZ
 			vacio= new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/vacio.png");
 			pep = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/peperoni.png");
+			haw = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/hawaiana.png");
+			amb = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/inventario/ambas.png");
 		//reputacion
 			alta= new GUI(d3dDevice, d3dContext, 0.3, 0.5, L"Assets/UI/reputacion/alta.png");
 			media = new GUI(d3dDevice, d3dContext, 0.3, 0.5, L"Assets/UI/reputacion/media.png");
@@ -154,12 +182,20 @@ public:
 		//input
 			teclas= new GUI(d3dDevice, d3dContext, 0.8, 0.3, L"Assets/UI/teclas/teclas.png");
 			pedidos = new GUI(d3dDevice, d3dContext, 0.8, 1.0, L"Assets/UI/teclas/pedidosxd.png");
+			hawE = new GUI(d3dDevice, d3dContext, 0.5, 0.5, L"Assets/UI/teclas/haw2.png");
+			pepE = new GUI(d3dDevice, d3dContext, 0.5, 0.5, L"Assets/UI/teclas/pep.png");
 		
 		//ciclo dia noche
 			diaUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/diaxd.png");
 			tardeUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/tardexd.png");
 			nocheUI = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/UI/ciclo/nochexd.png");
 		
+		//final
+			ganar= new GUI(d3dDevice, d3dContext, 2.0, 2.0, L"Assets/UI/fin/ganaste.png");
+			perder= new GUI(d3dDevice, d3dContext, 2.0, 2.0, L"Assets/UI/fin/perdiste.png");
+			malTiempo = new GUI(d3dDevice, d3dContext, 2.0, 2.0, L"Assets/UI/fin/malTiempo.png");
+			malReputacion = new GUI(d3dDevice, d3dContext, 2.0, 2.0, L"Assets/UI/fin/malReputacion.png");
+
 		velIzqDer = 0;//xd
 		rotCam = 0;//xd
 		
@@ -180,6 +216,19 @@ public:
 
 		tiempo = 60;
 		texto = new Text(d3dDevice, d3dContext, 3.6, 1.2, L"Assets/UI/fuente/font.png", XMFLOAT4(0.0f, 1.0f, 1.0f, 0.0f));
+		reputacion = 100;
+		
+		clientePep = false;
+		clienteHaw = false;
+
+		pedido1 = false;
+		pedido2 = false;
+
+		seleccion = 0;//peperoni
+
+		Win = false;
+		Lose = false;
+
 	}
 
 	~DXRR()
@@ -381,8 +430,7 @@ public:
 		skydome->Render(camara->posCam);
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
-		//TurnOnAlphaBlending();
-		
+
 		//BILLBOARD
 		//animado
 		//billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
@@ -437,8 +485,6 @@ public:
 		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
 			-40, -80, terreno->Superficie(40, 0), 10, false);
 
-		//TurnOffAlphaBlending();
-		
 		//MODELOS
 		edificio->setPosX(5.0f);
 		edificio->setPosZ(100.0f);
@@ -457,9 +503,15 @@ public:
 		repartidor->Draw(camara->vista, camara->proyeccion, terreno->Superficie(repartidor->getPosX(), repartidor->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1);
 		
 		if (peperoni == false) {
-			pizza->setPosX(-15.0f);
+			pizza->setPosX(-16.0f);
 			pizza->setPosZ(-75.0f);
 			pizza->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ()) + 4, camara->posCam, 10.0f, 0, 'A', 1);
+
+		}
+		if (hawaiana == false) {
+			pizza2->setPosX(-13.0f);
+			pizza2->setPosZ(-75.0f);
+			pizza2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pizza->getPosX(), pizza->getPosZ()) + 4, camara->posCam, 10.0f, 0, 'A', 1);
 
 		}
 		//Camara en el modelo 
@@ -482,42 +534,68 @@ public:
 		casa3->setPosZ(100.0f);
 		casa3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(casa3->getPosX(), casa3->getPosZ()), camara->posCam, 10.0f, 180*(XM_PI/180), 'Y', 1);
 		
-		//INTERFAZ
-		//reputacion
-		if (tiempo > 45) {
-			alta->Draw(-0.7f, 0.8f);
-		}
-		else if (tiempo > 25) {
-			media->Draw(-0.7f, 0.8f);
-		}
-		else if (tiempo < 25) {
-			baja->Draw(-0.7f, 0.8f);
-		}
-			
-		
+		//INTERFAZ UI
 
-		teclas->Draw(0.8f, 0.2f);
+		if (Win == false && Lose ==false) {
+			teclas->Draw(0.8f, 0.2f);
+			if (inventario == true) {
 
-		if (inventario == true) {
-			if(peperoni)
-				pep->Draw(0.0f, -0.8f);
-			else
-				vacio->Draw(0.0f, -0.8f);
+				if (peperoni && hawaiana) {
+					amb->Draw(0.0f, -0.8f);
+				}else if(peperoni)
+					pep->Draw(0.0f, -0.8f);
+				else if(hawaiana)
+					haw->Draw(0.0f, -0.8f);
+				else
+					vacio->Draw(0.0f, -0.8f);
 
-		}
-		if (pedidosQ == true) {
-			pedidos->Draw(0.0f, 0.0f);
-		}
-
-		//TEXTO
-		tiempo -= 0.01;
-		TurnOnAlphaBlending();
+			}
+			if (pedidosQ == true) {
+				pedidos->Draw(0.0f, 0.0f);
+			}
+			//TEXTO
+			if (tiempo >= 0)
+				tiempo -= 0.01;
+			TurnOnAlphaBlending();
 			//texto->DrawText(0.5f, 0.7f, "Tiempo: " + texto->Time(tiempo), 0.015);
 			texto->DrawText(0.8f, 0.68f, texto->Time(tiempo), 0.015);
+			//texto->DrawText(0.5f, 0.68f, texto->Time(reputacion), 0.015);
 			if (tiempo < 60 && tiempo>55) {
 				texto->DrawText(-0.5f, 0.0f, "Completa los pedidos pendientes...", 0.015);
 			}
-		TurnOffAlphaBlending();
+			if (seleccion == 0)
+				texto->DrawText(-0.5f, -0.8f, "Vacio", 0.015);
+			TurnOffAlphaBlending();
+
+			if (seleccion == 1)
+				pepE->Draw(-0.5f, -0.8f);
+			if (seleccion == 2)
+				hawE->Draw(-0.5f, -0.8f);
+
+			//reputacion
+			if (reputacion >= 0)
+				reputacion -= 0.02;
+
+			if (reputacion > 80)
+				alta->Draw(-0.7f, 0.8f);
+			if (reputacion <= 80 && reputacion > 30)
+				media->Draw(-0.7f, 0.8f);
+			if (reputacion <= 30)
+				baja->Draw(-0.7f, 0.8f);
+		}
+			if(pedido1==true && pedido2==true){
+				Win = true;
+				ganar->Draw(0.0f, 0.0f);
+			}
+			if (tiempo <= 0) {
+				Lose = true;
+				malTiempo->Draw(0.0f, 0.0f);
+
+			}
+			if (reputacion <= 0) {
+				Lose = true;
+				malReputacion->Draw(0.0f, 0.0f);
+			}
 
 		//COLISION
 		if (!isPointInsideSphere(camara->GetPoint(), casa1->GetSphere(10))&& 
@@ -531,10 +609,41 @@ public:
 		else {
 			camara->posCam = camara->posCamPast;//sino establece la camara en su posicion anterior para que no pase el limite de la esfera
 		}
-		if (!isPointInsideSphere(camara->GetPoint(), pizza->GetSphere(3))) {}
-		else {
-			peperoni = true;
+		//logica entregar pizzas a la casa correcta
+		if (isPointInsideSphere(camara->GetPoint(), pizza->GetSphere(3))) { peperoni = true; }
+		if (isPointInsideSphere(camara->GetPoint(), edificio->GetSphere(18))) { 
+			clientePep = true; }
+		else { clientePep = false; }
+
+		if (clientePep == true && seleccion == 1 && peperoni ==true)//revisa...colision con cliente, tipo de pizza seleccionada y tener la pizza a la mano
+		{
+			reputacion = reputacion + 40;
+			seleccion = 0;
+			peperoni = false;
+			pedido1 = true;
 		}
+		else if(clientePep == true && seleccion == 2 && hawaiana==true) {
+			hawaiana = false;
+			reputacion = reputacion - 40;
+		}
+		//logica pizza hawaiana
+		if (isPointInsideSphere(camara->GetPoint(), pizza2->GetSphere(3))) { hawaiana = true; }
+		if (isPointInsideSphere(camara->GetPoint(), casa2->GetSphere(18))) {
+			clienteHaw = true;
+		}
+		else { clienteHaw = false; }
+		if (clienteHaw == true && seleccion == 2 && hawaiana == true)
+		{
+			reputacion = reputacion + 40;
+			seleccion = 0;
+			hawaiana = false;
+			pedido2 = true;
+		}
+		else if (clienteHaw == true && seleccion == 1 && peperoni == true) {
+			peperoni = false;
+			reputacion = reputacion - 40;
+		}
+
 
 		if (skydome->getSkydomeStatus() == 3 || skydome->getSkydomeStatus() == 0) {
 			diaUI->Draw(0.8, 0.8);

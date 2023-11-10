@@ -199,6 +199,18 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             if (keyboardData[DIK_Q] & 0x80) {
                 dxrr->pedidosQ = !dxrr->pedidosQ;
             }
+            if (keyboardData[DIK_1] & 0x80) {
+                if (dxrr->peperoni == true)
+                    dxrr->seleccion = 1;
+                else
+                    dxrr->seleccion = 0;
+            }
+            if (keyboardData[DIK_2] & 0x80) {
+                if (dxrr->hawaiana == true)
+                    dxrr->seleccion = 2;
+                else
+                    dxrr->seleccion = 0;
+            }
             if (keyboardData[DIK_B] & 0x80) {
                 dxrr->breakpoint = true;
             }
