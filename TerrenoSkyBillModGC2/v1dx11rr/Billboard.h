@@ -424,6 +424,7 @@ public:
 		rotationMat._13 = difz / dist;
 		rotationMat._31 = -rotationMat._13;
 
+
 		D3DXMATRIX translationMat;
 		D3DXMatrixTranslation(&translationMat, posx, posy, posz);
 

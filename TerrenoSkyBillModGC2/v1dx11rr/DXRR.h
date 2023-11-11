@@ -157,7 +157,7 @@ public:
 		billCargaFuego();
 		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
-		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Sky/sky_2.jpg", L"Sky/skydome_Tarde.jpg", L"Sky/SkyNoche.png");
+		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Sky/sky_2.jpg", L"Sky/skydome2.jpg", L"Sky/SkyNoche.png");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		
 		edificio = new ModeloRR(d3dDevice, d3dContext, "Assets/edificio/edificio.obj", L"Assets/edificio/edificio_1.jpg", L"Assets/noSpecMap.jpg", 0, 0);
