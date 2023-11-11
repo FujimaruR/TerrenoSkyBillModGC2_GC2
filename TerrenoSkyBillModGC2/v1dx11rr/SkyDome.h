@@ -35,8 +35,10 @@ private:
 
 	ID3D11ShaderResourceView* textura;
 	ID3D11SamplerState* texSampler;
+
 	ID3D11ShaderResourceView* texturaNoche;
 	ID3D11ShaderResourceView* texturaTarde;
+
 	ID3D11Buffer* blendFactorCB;
 	D3DXVECTOR3 blendFactor;
 
@@ -55,11 +57,14 @@ private:
 	int seg = 0;
 	int bandera = 0;
 	int bandera2 = 0;
+	int indiceTextura=0;
+	float angulo=0;
 
 public:
 	int getSkydomeStatus() {
 		return bandera2;
 	}
+	float colores[4] = { 1.0,1.0,1.0,1.0 };//xd
 
 	SkyDome(int slices, int stacks, float radio, ID3D11Device** d3dDevice,
 		ID3D11DeviceContext** d3dContext, WCHAR* diffuseTex, WCHAR* diffuseTexTarde, WCHAR* diffuseTexNoche)
@@ -335,24 +340,116 @@ public:
 		(*d3dContext)->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		(*d3dContext)->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 		(*d3dContext)->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+		//xd
 		(*d3dContext)->VSSetShader(solidColorVS, 0, 0);
 		(*d3dContext)->PSSetShader(solidColorPS, 0, 0);
+		
 		(*d3dContext)->PSSetShaderResources(0, 1, &textura);
 		(*d3dContext)->PSSetShaderResources(1, 1, &texturaTarde);
 		(*d3dContext)->PSSetShaderResources(2, 1, &texturaNoche);
+		
 		(*d3dContext)->PSSetSamplers(0, 1, &texSampler);
 
+		//rotacion del skydome
+		D3DXMATRIX rotationMat;
+		angulo += 0.001;
+		D3DXMatrixRotationY(&rotationMat, angulo);
+		D3DXMATRIX traslacionMat;
 		D3DXMATRIX worldMat;
-		D3DXMatrixTranslation(&worldMat, trans.x, trans.y - 50.0f, trans.z);
+		D3DXMatrixTranslation(&traslacionMat, trans.x, trans.y - 50.0f, trans.z);
+		
+		D3DXMATRIX scaleMat;
+		D3DXMatrixScaling(&scaleMat, 1, 1, 1);
+		worldMat = rotationMat* scaleMat* traslacionMat;
 		D3DXMatrixTranspose(&worldMat, &worldMat);
+
 		matrices->worldMatrix = worldMat;
+
+		//TICKS son la cantidad de frames para contamplar un segundo
+		if (ticks >= 60) {
+			seg++; //SEG es basicamente los segundos
+			condicion = true;// CONDICION es un booleano que permitira el acceso a en funcion de que segundo estamos el cambio 
+							//en el blend, sin la condicion al contar ticks el segundo se mantiene y comenzaria a estaquarse el valor en un mismo segundo
+							//Ademas gracias a esto mas a delante limitaremos el aumento o decremento de la color de luz para el terreno y objetos
+		}
+		if (condicion == true) {
+			if (seg < 10 && seg > 0) { //Es la cantidad de tiempo que se mantendra la textura dia
+				blendFactor.x = 1.0;
+				blendFactor.y = 0.0;
+				blendFactor.z = 0.0;
+			}
+			if (seg < 20 && seg > 10) { //Transicion dia tarde difuse debe ser
+				blendFactor.x -= 0.1;
+				blendFactor.y += 0.1;
+				blendFactor.z = 0.0;
+				bandera = 1;			//Mas adelante servira para setar el status del cambio del color de la luz al entorno
+				//indiceTextura = 1;
+				bandera2 = bandera;
+			}
+			if (seg < 30 && seg > 20) { //Es la cantidad de tiempo que se mantendra la textura tarde
+				blendFactor.x = 0.0;
+				blendFactor.y = 1.0;
+				blendFactor.z = 0.0;
+			}
+			if (seg < 40 && seg > 30) { //Transicion tade noche difuse debe ser (0.2, 0.2 , 0.2,1)
+				blendFactor.x = 0.0;
+				blendFactor.y -= 0.1;
+				blendFactor.z += 0.1;
+				bandera = 2;			//Mas adelante servira para setar el status del cambio del color de la luz al entorno
+				//indiceTextura = 2;
+				bandera2 = bandera;
+			}
+			if (seg < 50 && seg > 40) { //Es la cantidad de tiempo que se mantendra la textura noche
+				blendFactor.x = 0.0;
+				blendFactor.y = 0.0;
+				blendFactor.z = 1.0;
+			}
+			if (seg < 60 && seg > 50) { //Transicion noche dia difuse debe ser (1, 1, 1, 1)
+				blendFactor.x += 0.1;
+				blendFactor.y = 0.0;
+				blendFactor.z -= 0.1;
+				bandera = 3;			//Mas adelante servira para setar el status del cambio del color de la luz al entorno
+				//indiceTextura = 0;
+				bandera2 = bandera;
+			}
+			condicion = false; //Se hace false para limitar que solo sea true cada vez que pase un segundo y no estaquear los valores, igual para el color del dia
+		}
+
+		ticks++;
+		if (ticks > 60) { //Arriba de 60 ticks regresaremos a 0 para comenzar el conteo de nuevo
+			ticks = 0;
+		}
+
+		if (seg > 60) { //Setea que si segundos es mayor a 60 a 0 para reiniciar el ciclo
+			seg = 0;
+		}
+		//ciclo de iluminacion
+		if (bandera == 1) {
+			colores[0] = colores[0] - 0.03;
+			colores[1] = colores[1] - 0.04;
+			colores[2] = colores[2] - 0.08;
+			bandera = 0;
+		}
+		if (bandera == 2) {
+			colores[0] = colores[0] - 0.07;
+			colores[1] = colores[1] - 0.04;
+			colores[2] = colores[2] + 0.01;
+			bandera = 0;
+		}
+		if (bandera == 3) {
+			colores[0] = colores[0] + 0.1;
+			colores[1] = colores[1] + 0.08;
+			colores[2] = colores[2] + 0.07;
+			bandera = 0;
+		}
+		//xd
 
 		(*d3dContext)->UpdateSubresource(matrixBufferCB, 0, 0, matrices, sizeof(MatrixType), 0);
 		(*d3dContext)->VSSetConstantBuffers(0, 1, &matrixBufferCB);
 
 		(*d3dContext)->UpdateSubresource(blendFactorCB, 0, 0, &blendFactor, sizeof(D3DXVECTOR4), 0);
 		(*d3dContext)->PSSetConstantBuffers(0, 1, &blendFactorCB);
+		
 
 		(*d3dContext)->DrawIndexed(cantIndex, 0, 0);
 	}

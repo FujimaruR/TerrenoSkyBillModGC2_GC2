@@ -229,6 +229,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
             if (keyboardData[DIK_ESCAPE] & 0x80) {
                 KillTimer(hWnd, 100);
+                dxrr->LiberaD3D();
                 PostQuitMessage(0);
                 return 0;
             }

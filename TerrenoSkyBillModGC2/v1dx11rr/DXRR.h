@@ -82,7 +82,7 @@ public:
 	Camara *camara;
 
 	//modelos xd
-	ModeloRR* edificio;
+	ModeloRR* edificio=0;
 	ModeloRR* pizza;//pep
 	ModeloRR* pizza2;//haw
 	ModeloRR* pizzeria;
@@ -134,6 +134,9 @@ public:
 
 	bool Win;//senial de que ganaste el juego, servira para quitar la UI
 	bool Lose;
+
+	//COLOR DEL CIELO
+	D3DXVECTOR4 colorSky;
 
 	Text* texto;
     DXRR(HWND hWnd, int Ancho, int Alto)
@@ -229,11 +232,17 @@ public:
 		Win = false;
 		Lose = false;
 
+		//INICIAR COLOR CIELO
+		colorSky[0] = 1.0;
+		colorSky[1] = 1.0;
+		colorSky[2] = 1.0;
+		colorSky[3] = 1.0;
+
 	}
 
 	~DXRR()
 	{
-		LiberaD3D();
+		//LiberaD3D();
 		m_XACT3.Terminate();
 	}
 	
@@ -397,12 +406,90 @@ public:
 		if(d3dDevice)
 			d3dDevice->Release();
 
+		//reputacion
+		delete alta;
+		delete media;
+		delete baja;
+		//inputs
+		delete teclas;
+		delete pedidos;
+		delete hawE;
+		delete pepE;
+		//inventario
+		delete vacio;
+		delete pep;
+		delete haw;
+		delete amb;
+		//Final
+		delete ganar;
+		delete perder;
+		delete malReputacion;
+		delete malTiempo;
+
+		delete diaUI;
+		delete tardeUI;
+		delete nocheUI;
+
+		delete terreno;
+		delete skydome;
+		//delete billboard;
+		//delete chica;//xd billboard
+		//delete chico;
+		//delete arbol1;
+		//delete arbol2;
+		//delete arbol3;
+
+		//delete camara;
+
+		//modelos xd
+		delete pizza; //pep
+		delete pizza2;//haw
+		delete pizzeria;
+		delete repartidor;
+		delete moto;
+		delete mesa;
+		delete casa1;
+		delete casa2;
+		delete casa3;
+		delete edificio;
+		
+		edificio = nullptr;
+		alta = nullptr;
+		media = nullptr;
+		baja = nullptr;
+		teclas = nullptr;
+		pedidos = nullptr;
+		hawE = nullptr;
+		pepE = nullptr;
+		vacio = nullptr;
+		pep = nullptr;
+		haw = nullptr;
+		amb = nullptr;
+		ganar = nullptr;
+		perder = nullptr;
+		malReputacion = nullptr;
+		malTiempo = nullptr;
+		diaUI = nullptr;
+		tardeUI = nullptr;
+		nocheUI = nullptr;
+
+		terreno = nullptr;
+		skydome = nullptr;
+		//billboard = nullptr;
+		//chica = nullptr;//xd billboard
+		//chico = nullptr;
+		//arbol1 = nullptr;
+		//arbol2 = nullptr;
+		//arbol3 = nullptr;
+		//camara = nullptr;
+
 		depthTexture = 0;
 		depthStencilView = 0;
 		d3dDevice = 0;
 		d3dContext = 0;
 		swapChain = 0;
 		backBufferTarget = 0;
+
 	}
 	
 	void Render(void)
@@ -416,7 +503,11 @@ public:
 		bool collide = false;
 		if (d3dContext == 0)
 			return;
-
+		
+		colorSky.x = skydome->colores[0] / 2;
+		colorSky.y = skydome->colores[1] / 2;
+		colorSky.z = skydome->colores[2] / 2;
+		colorSky.w = skydome->colores[3] / 2;
 		float clearColor[4] = { 0, 0, 0, 1.0f };
 		d3dContext->ClearRenderTargetView(backBufferTarget, clearColor);
 		d3dContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -672,6 +763,7 @@ public:
 	//Activa el alpha blend para dibujar con transparencias
 	void TurnOnAlphaBlending()
 	{
+
 		float blendFactor[4];
 		blendFactor[0] = 0.0f;
 		blendFactor[1] = 0.0f;

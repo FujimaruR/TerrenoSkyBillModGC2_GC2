@@ -240,7 +240,7 @@ public:
 			&IndexBuffer);
 	}
 
-	bool UnloadContent()
+	void UnloadContent()
 	{
 		if (VertexBuffer)
 			VertexBuffer->Release();
